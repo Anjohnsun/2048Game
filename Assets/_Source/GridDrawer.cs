@@ -9,23 +9,25 @@ public class GridDrawer : MonoBehaviour
 {
     [SerializeField] GridLayoutGroup _glGroup;
 
-    [Inject] Grid _grid;
+    [Inject] GridHandler _gridHandler;
     [Inject] Points _points;
     [SerializeField] private TextMeshProUGUI _textPrefab;
     [SerializeField] Vector2Int _gridSize;
+    [SerializeField] UIDrawer _uiDrawer;
     private TextMeshProUGUI[,] _fields;
+
     private void Start()
     {
-        _grid.Construct(_gridSize, this, _points);
+        _gridHandler.Construct(_gridSize, this, _points, _uiDrawer);
         _fields = new TextMeshProUGUI[_gridSize.x, _gridSize.y];
 
-        _glGroup.constraintCount = _grid.CellGrid.GetLength(1);
+        _glGroup.constraintCount = _gridHandler.Grid.CellGrid.GetLength(1);
 
-        for (int x = 0; x < _grid.CellGrid.GetLength(0); x++)
-            for (int y = 0; y < _grid.CellGrid.GetLength(1); y++)
-                _fields[x,y] = Instantiate(_textPrefab, _glGroup.transform);
+        for (int x = 0; x < _gridHandler.Grid.CellGrid.GetLength(0); x++)
+            for (int y = 0; y < _gridHandler.Grid.CellGrid.GetLength(1); y++)
+                _fields[x, y] = Instantiate(_textPrefab, _glGroup.transform);
 
-        _glGroup.cellSize = new Vector2(_glGroup.GetComponent<RectTransform>().rect.width/_gridSize.x,
+        _glGroup.cellSize = new Vector2(_glGroup.GetComponent<RectTransform>().rect.width / _gridSize.x,
             _glGroup.GetComponent<RectTransform>().rect.height / _gridSize.y);
 
         RedrawGrid();
@@ -33,8 +35,8 @@ public class GridDrawer : MonoBehaviour
 
     public void RedrawGrid()
     {
-        for (int x = 0; x < _grid.CellGrid.GetLength(0); x++)
-            for (int y = 0; y < _grid.CellGrid.GetLength(1); y++)
-                _fields[x, y].text = _grid.CellGrid[x, y].ToString();
+        for (int x = 0; x < _gridHandler.Grid.CellGrid.GetLength(0); x++)
+            for (int y = 0; y < _gridHandler.Grid.CellGrid.GetLength(1); y++)
+                _fields[x, y].text = _gridHandler.Grid.CellGrid[x, y].ToString();
     }
 }

@@ -14,12 +14,18 @@ public class Points : MonoBehaviour
 
     public void AddPoints(int value)
     {
-        _points += value;
+        _points += value*2;
         UpdateText();
     }
 
     private void UpdateText()
     {
         _text.text = _points.ToString();
+    }
+
+    public void SetToZero()
+    {
+        _points = 0;
+        UpdateText();
     }
 }
